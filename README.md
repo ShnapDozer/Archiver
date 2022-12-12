@@ -1,2 +1,2 @@
-# Archover
+# Archiver
 Архиватор на Qt/c++ 
