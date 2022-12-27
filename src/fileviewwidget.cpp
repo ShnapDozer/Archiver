@@ -45,7 +45,6 @@ Common::MetaData FileViewWidget::getMetaData()
 
     ret.fileName = _fileInfo.fileName();
     ret.nameSize = ret.fileName.size();
-    ret.originalSize = _fileInfo.size();
     ret.compressionSize = -1;
 
     if(ui->huffmanCheckBox->isChecked()) {

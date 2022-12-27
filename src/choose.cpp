@@ -28,7 +28,7 @@ void Choose::showCompressDialog()
     en->setWindowTitle("Сжатие данных");
     en->show();
 
-    this->close();
+//    this->close();
 }
 
 // Показать диалоговое окно для восстановления данных:
@@ -38,5 +38,5 @@ void Choose::showDecompressDialog()
     de->setWindowTitle("Восстановление данных сжатых по алгоритму Хаффмана");
     de->show();
 
-    this->close();
+//    this->close();
 }

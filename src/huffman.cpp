@@ -48,7 +48,7 @@ void buildNodeList(HuffNode** nodeList, HuffFreq* hFreq, unsigned int numOfFreq)
 
     for (i = 0; i < numOfFreq; i++)
     {
-        qDebug() << char(hFreq[i].charCode) << hFreq[i].freq;
+        // qDebug() << char(hFreq[i].charCode) << hFreq[i].freq;
         newNode = (HuffNode *)malloc(sizeof(HuffNode));
         newNode->charCode = hFreq[i].charCode;
         newNode->freq = hFreq[i].freq;
@@ -288,7 +288,7 @@ void writeDecodedData(FILE * src, FILE * dest, HuffNode * rootTree, unsigned int
 
         if (currNode->leaf)
         {
-            qDebug() << char(currNode->charCode);
+            // qDebug() << char(currNode->charCode);
             fputc(currNode->charCode, dest);
             bytesWritten++;
             currNode = rootTree;
@@ -331,13 +331,13 @@ void freeHuffTree(HuffNode* treeRoot)
 void huffmanEncode(const char* inputFile, const char* outputFile)
 {
     // Открыть исходный файл и выходной файл:
-    qDebug() <<inputFile;
+    // qDebug() <<inputFile;
     FILE* src = fopen(inputFile, "rb");
     FILE * dest = fopen(outputFile, "wb");
 
     // Проверка на существование входного файла:
     if (src == NULL) {
-        qDebug() <<  "Невозможно открыть входной файл.";
+        // qDebug() <<  "Невозможно открыть входной файл.";
         exit(EXIT_FAILURE);
     }
 

@@ -21,7 +21,8 @@ Encoding::Encoding(QWidget *parent)
     setAcceptDrops(true);
 
     ui->outputFileName->setText("TestArch");
-    ui->outputFilePath->setText("/media/rewood/Other/Qt_Projects/build/test");
+//    ui->outputFilePath->setText("/media/rewood/Other/Qt_Projects/build/test");
+    ui->outputFilePath->setText("C:\\Users\\ReWoodPC\\Downloads\\Qt Projects\\TestArchive");
 
 
     connect(ui->browseButton, SIGNAL(clicked()), this, SLOT(onBrowsButtonClicked()));
@@ -83,7 +84,10 @@ void Encoding::compressFiles()
         const QStringList fileArgs = files[i]->getArgs();
 
         const QString inputFile = files[i]->getFilePath();
-        const QString tmpOutputFile = outputFilePath + "/tmp/tmp_" + metaData.fileName.section(".",0,0) + ".tmp";
+//        const QString tmpOutputFile = outputFilePath + "/tmp/tmp_" + metaData.fileName.section(".",0,0) + ".tmp";
+
+        const QString tmpOutputFile = outputFilePath + "/" + outputFileName + ".usa";
+        FIlE* file = fopen();
 
 
         if(fileArgs.contains("--huffman")) {
@@ -97,22 +101,22 @@ void Encoding::compressFiles()
         meteDatas.push_back(metaData);
     }
 
-    QFile outFile(outputFilePath + "/" + outputFileName + ".usa");
-    if (!outFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
-        Common::showDoneMessage("Ошибка создания выходного файла", "Сжатие данных");
-        return;
-    }
-    if(!meteDatas.isEmpty()) {
-        QDataStream outStream(&outFile);
+//    QFile outFile(outputFilePath + "/" + outputFileName + ".usa");
+//    if (!outFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
+//        Common::showDoneMessage("Ошибка создания выходного файла", "Сжатие данных");
+//        return;
+//    }
+//    if(!meteDatas.isEmpty()) {
+//        QDataStream outStream(&outFile);
 
-        Common::writeFileHeader(Common::FileHeader(), outStream);
-        Common::writeMetaData(meteDatas, outStream);
+//        Common::writeFileHeader(Common::FileHeader(), outStream);
+//        Common::writeMetaData(meteDatas, outStream);
 
-        foreach(QString tmpFile, tmpFiles) {
-            Common::writeFile(tmpFile, outStream, true);
+//        foreach(QString tmpFile, tmpFiles) {
+//            Common::writeFile(tmpFile, outStream, true);
 
-        }
+//        }
 
-        outFile.close();
-    }
+//        outFile.close();
+//    }
 }

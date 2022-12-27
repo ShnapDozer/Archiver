@@ -14,7 +14,6 @@ namespace Common {
     struct MetaData{
         QString fileName;
         unsigned int nameSize;
-        unsigned int originalSize;
         unsigned int compressionSize;
         unsigned char args[3] { '0', '0', '0' };
     };
@@ -23,13 +22,13 @@ namespace Common {
     char* toChar(const QString& text);
     qint64 getFileSize(const QString& filePath);
 
-    FileHeader readFileHeader(QDataStream &file);
-    void writeFileHeader(FileHeader fileHeader, QDataStream &file);
+    FileHeader readFileHeader(FILE* file);
+    void writeFileHeader(FileHeader fileHeader, FILE* file);
 
-    QVector<MetaData> readMetaData(QDataStream &file);
-    void writeMetaData(QVector<MetaData> metaData, QDataStream &file);
+    QVector<MetaData> readMetaData(FILE* file);
+    void writeMetaData(const QVector<MetaData> &metaData, FILE* file);
 
-    void writeFile(const QString &inFile, QDataStream &outFile, bool deleteFile = false);
+    void writeFile(const QString &inFile, FILE* outFile, bool deleteFile = false);
 }
 
 #endif // COMMON_H
