@@ -17,8 +17,14 @@ Decoding::Decoding(QWidget *parent) :
     connect(ui->decodeButton, SIGNAL(clicked()), this, SLOT(decompressFile()));
     connect(ui->inputFile, &QLineEdit::textChanged, this, &Decoding::filePahChanged);
 
-    ui->inputFile->setText("C:\\Users\\ReWoodPC\\Downloads\\Qt Projects\\TestArchive\\TestArch.usa");
-    ui->outputPath->setText("C:\\Users\\ReWoodPC\\Downloads\\Qt Projects\\TestArchive\\Ans");
+//    ui->inputFile->setText("C:\\Users\\ReWoodPC\\Downloads\\Qt Projects\\TestArchive\\TestArch.usa");
+//    ui->outputPath->setText("C:\\Users\\ReWoodPC\\Downloads\\Qt Projects\\TestArchive\\Ans");
+
+    ui->inputFile->setText("/workarea/otdMDP/users/yusalkov/Projects/build/testArch/testArch.usa");
+    ui->outputPath->setText("/workarea/otdMDP/users/yusalkov/Projects/build/ans");
+
+    filePahChanged();
+
 }
 
 // Деструктор:
@@ -43,13 +49,30 @@ void Decoding::browsePaths()
 
 // Восстановить сжатый файл:
 void Decoding::decompressFile()
-{
-    const QString inputFile = ui->inputFile->text();
+{    
+    const QString inputFilePath = ui->inputFile->text();
     const QString outputPath = ui->outputPath->text();
+    if(QFile::exists(inputFilePath)) {
+        FILE* inputFile = fopen(inputFilePath.toStdString().c_str(), "rb");
 
+        if (inputFile == NULL) {
+            qDebug() <<  "Невозможно открыть входной файл: " + inputFilePath;
+            exit(EXIT_FAILURE);
+        }
 
-    const QString outputFile = outputPath + "/test.exe";
-    huffmanDecode(inputFile.toStdString().c_str(), outputFile.toStdString().c_str(), 0);
+        Common::readFileHeader(inputFile);
+
+        _metaData = Common::readMetaData(inputFile);
+        foreach (Common::MetaData metaData, _metaData) {
+            const QString outputFilePath = outputPath + "/" + metaData.fileName;
+            if(metaData.args[0] != '0') {
+                 huffmanDecode(inputFile, outputFilePath.toStdString().c_str());
+            }
+        }
+
+        fclose(inputFile);
+    }
+
 
 //    if(!_metaData.isEmpty() && !outputPath.isEmpty()) {
 
@@ -66,6 +89,32 @@ void Decoding::decompressFile()
 
 void Decoding::filePahChanged()
 {
+    const QString inputFilePath = ui->inputFile->text();
+    const QString outputPath = ui->outputPath->text();
+    if(QFile::exists(inputFilePath)) {
+        FILE* inputFile = fopen(inputFilePath.toStdString().c_str(), "rb");
+
+        Common::readFileHeader(inputFile);
+
+        _metaData = Common::readMetaData(inputFile);
+        FileViewWidget *file;
+        foreach (Common::MetaData metaData, _metaData) {
+
+            file = new FileViewWidget(metaData, outputPath + "/" + metaData.fileName, this);
+            ui->files->insertWidget(_fileWidgets.size(), file);
+            _fileWidgets.push_back(file);
+
+
+            qDebug() << metaData.fileName;
+            qDebug() << metaData.compressionSize;
+            qDebug() << char(metaData.args[0]) << char(metaData.args[1]) << char(metaData.args[2]);
+
+            qDebug() << "---------------------";
+        }
+
+        fclose(inputFile);
+    }
+
 //    const QString inputFile_S = ui->inputFile->text();
 //    _inputFile = new QFile(inputFile_S);
 //    if(_inputFile->exists()) {

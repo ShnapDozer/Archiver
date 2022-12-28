@@ -1,9 +1,9 @@
-#include "include/fileviewwidget.h"
-#include "ui_fileviewwidget.h"
+#include "include/fileEncodewidget.h"
+#include "ui_fileEncodewidget.h"
 
 
 FileViewWidget::FileViewWidget(const QString &filePath, QWidget *parent)
-    : QWidget(parent), ui(new Ui::FileViewWidget()), _fileInfo(filePath)
+    : QWidget(parent), ui(new Ui::FileEncodeWidget()), _fileInfo(filePath)
 {
     ui->setupUi(this);
 
@@ -12,6 +12,37 @@ FileViewWidget::FileViewWidget(const QString &filePath, QWidget *parent)
     ui->fileName->setText(_fileInfo.fileName());
     ui->filePath->setText(_fileInfo.filePath());
 }
+
+FileViewWidget::FileViewWidget(const Common::MetaData &metaData, const QString &filePath, QWidget *parent)
+    : QWidget(parent), ui(new Ui::FileEncodeWidget())
+{
+    ui->setupUi(this);
+
+    ui->filePath->setReadOnly(true);
+
+    ui->fileName->setText(metaData.fileName);
+    ui->filePath->setText(filePath + "/" + metaData.fileName);
+
+    for(int i = 0; i < 3; ++i) {
+        if(metaData.args[i] != '0') {
+            switch (i) {
+                case 0:
+                    ui->huffmanCheckBox->setChecked(true);
+                    break;
+                case 1:
+                    ui->lzCheckBox->setChecked(true);
+                    break;
+                case 2:
+                    ui->interferenceCheckBox->setChecked(true);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
+
+
 
 FileViewWidget::~FileViewWidget()
 {

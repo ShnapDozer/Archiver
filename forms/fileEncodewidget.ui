@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>FileViewWidget</class>
- <widget class="QWidget" name="FileViewWidget">
+ <class>FileEncodeWidget</class>
+ <widget class="QWidget" name="FileEncodeWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -15,7 +15,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="spacing">
-    <number>5</number>
+    <number>3</number>
    </property>
    <property name="leftMargin">
     <number>0</number>
@@ -30,15 +30,21 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QLabel" name="fileName">
+    <widget class="QLineEdit" name="fileName">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="minimumSize">
       <size>
-       <width>300</width>
+       <width>150</width>
        <height>0</height>
       </size>
      </property>
-     <property name="text">
-      <string>fileName</string>
+     <property name="readOnly">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -46,30 +52,20 @@
     <widget class="QLineEdit" name="filePath">
      <property name="minimumSize">
       <size>
-       <width>100</width>
+       <width>0</width>
        <height>0</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>500</width>
+       <width>16777215</width>
        <height>16777215</height>
       </size>
      </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
     </widget>
-   </item>
-   <item>
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item>
     <widget class="QCheckBox" name="huffmanCheckBox">
@@ -102,19 +98,6 @@
     </widget>
    </item>
    <item>
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
     <widget class="QPushButton" name="pushButton">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -124,8 +107,8 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>30</width>
-       <height>30</height>
+       <width>20</width>
+       <height>20</height>
       </size>
      </property>
      <property name="text">

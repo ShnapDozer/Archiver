@@ -22,7 +22,8 @@ Encoding::Encoding(QWidget *parent)
 
     ui->outputFileName->setText("TestArch");
 //    ui->outputFilePath->setText("/media/rewood/Other/Qt_Projects/build/test");
-    ui->outputFilePath->setText("C:\\Users\\ReWoodPC\\Downloads\\Qt Projects\\TestArchive");
+    ui->outputFilePath->setText("/workarea/otdMDP/users/yusalkov/Projects/build/testArch");
+//    ui->outputFilePath->setText("C:\\Users\\ReWoodPC\\Downloads\\Qt Projects\\TestArchive");
 
 
     connect(ui->browseButton, SIGNAL(clicked()), this, SLOT(onBrowsButtonClicked()));
@@ -84,11 +85,7 @@ void Encoding::compressFiles()
         const QStringList fileArgs = files[i]->getArgs();
 
         const QString inputFile = files[i]->getFilePath();
-//        const QString tmpOutputFile = outputFilePath + "/tmp/tmp_" + metaData.fileName.section(".",0,0) + ".tmp";
-
-        const QString tmpOutputFile = outputFilePath + "/" + outputFileName + ".usa";
-        FIlE* file = fopen();
-
+        const QString tmpOutputFile = outputFilePath + "/tmp_" + metaData.fileName.replace("//.*", "") + ".usa";
 
         if(fileArgs.contains("--huffman")) {
             huffmanEncode(inputFile.toStdString().c_str(), tmpOutputFile.toStdString().c_str());
@@ -101,22 +98,24 @@ void Encoding::compressFiles()
         meteDatas.push_back(metaData);
     }
 
-//    QFile outFile(outputFilePath + "/" + outputFileName + ".usa");
-//    if (!outFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
-//        Common::showDoneMessage("Ошибка создания выходного файла", "Сжатие данных");
-//        return;
-//    }
-//    if(!meteDatas.isEmpty()) {
-//        QDataStream outStream(&outFile);
+    if(!meteDatas.isEmpty()) {
 
-//        Common::writeFileHeader(Common::FileHeader(), outStream);
-//        Common::writeMetaData(meteDatas, outStream);
+        const QString outputFile = outputFilePath + "/" + outputFileName + ".usa";
+        FILE* outFile = fopen(outputFile.toStdString().c_str(), "wb");
 
-//        foreach(QString tmpFile, tmpFiles) {
-//            Common::writeFile(tmpFile, outStream, true);
+        if (outFile == NULL) {
+            qDebug() <<  "Невозможно открыть выходной файл: " + outputFile;
+            exit(EXIT_FAILURE);
+        }
 
-//        }
+        Common::writeFileHeader(Common::FileHeader(), outFile);
+        Common::writeMetaData(meteDatas, outFile);
 
-//        outFile.close();
-//    }
+        foreach(QString tmpFile, tmpFiles) {
+            Common::writeFile(tmpFile, outFile, true);
+        }
+        fclose(outFile);
+    }
+
+
 }

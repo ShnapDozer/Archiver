@@ -7,7 +7,7 @@
 #include "include/common.h"
 
 namespace Ui {
-class FileViewWidget;
+class FileEncodeWidget;
 }
 
 class FileViewWidget : public QWidget
@@ -16,6 +16,8 @@ class FileViewWidget : public QWidget
 
 public:
     explicit FileViewWidget(const QString &filePath, QWidget *parent = 0);
+    explicit FileViewWidget(const Common::MetaData &metaData, const QString &filePath, QWidget *parent = 0);
+
     ~FileViewWidget();
 
     QStringList getArgs();
@@ -24,7 +26,7 @@ public:
 
 
 private:
-    Ui::FileViewWidget *ui;
+    Ui::FileEncodeWidget *ui;
     QFileInfo _fileInfo;
 
 };

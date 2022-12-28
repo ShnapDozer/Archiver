@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include "include/fileviewwidget.h"
+#include "include/fileEncodewidget.h"
 
 namespace Ui {
 class Encoding;
@@ -25,11 +25,8 @@ private:
     Ui::Encoding *ui;
     QVector<FileViewWidget*> files;
 
-
-
 public slots:
     void onBrowsButtonClicked();
-
     void compressFiles();
 };
 

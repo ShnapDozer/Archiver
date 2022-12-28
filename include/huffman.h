@@ -43,7 +43,7 @@ struct HuffFreq
 };
 
 void huffmanEncode(const char* inputFile, const char* outputFile);
-void huffmanDecode(const char * inputFile, const char* outputFile, qint64 beginSpace = 0);
+void huffmanDecode(FILE *src, const char* outputFile);
 
 
 // Посчитать частотность всех символов и сохранить в списке:

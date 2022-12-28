@@ -337,7 +337,10 @@ void huffmanEncode(const char* inputFile, const char* outputFile)
 
     // Проверка на существование входного файла:
     if (src == NULL) {
-        // qDebug() <<  "Невозможно открыть входной файл.";
+        qDebug() <<  "Невозможно открыть входной файл.";
+        exit(EXIT_FAILURE);
+    } else if(dest == NULL) {
+        qDebug() <<  "Невозможно открыть выходной файл.";
         exit(EXIT_FAILURE);
     }
 
@@ -398,10 +401,9 @@ void huffmanEncode(const char* inputFile, const char* outputFile)
 }
 
 // Раскодировать файл по Хаффману:
-void huffmanDecode(const char * inputFile, const char* outputFile, qint64 beginSpace)
+void huffmanDecode(FILE *src, const char* outputFile)
 {
     // Открыть исходный файл:
-    FILE *src = fopen(inputFile, "rb");
     FILE* dest = fopen(outputFile, "wb");
 
     // Проверка на существование входного файла:
@@ -409,10 +411,6 @@ void huffmanDecode(const char * inputFile, const char* outputFile, qint64 beginS
     {
         fprintf(stderr, "Невозможно открыть входной файл.");
         exit(EXIT_FAILURE);
-    }
-
-    for(qint64 i = 0; i < beginSpace; ++i) {
-        fgetc(src);
     }
 
     // Считать заголовок:

@@ -30,87 +30,85 @@ qint64 Common::getFileSize(const QString &filePath)
     return fileInfo.size();
 }
 
-QVector<Common::MetaData> Common::readMetaData(FILE*file)
+QVector<Common::MetaData> Common::readMetaData(FILE* file)
 {
     QVector<MetaData> data;
-//    int countFiles;
 
-//    file >> countFiles;
-//    qDebug() << countFiles;
-//    for(int i = 0; i < countFiles; ++i) {
-//        MetaData mData;
-//        unsigned char args[3];
+    int countFiles = -1;
+    fread(&countFiles, 1, sizeof(countFiles), file);
 
-//        file >> mData.originalSize >> mData.compressionSize;
-//        file >> args[0] >> args[1] >> args[2];
-//        file >> mData.nameSize;
-//        qDebug() <<  mData.nameSize;
+    for(int i = 0; i < countFiles; ++i) {
+        MetaData mData;
+        fread(&mData.compressionSize, 1, sizeof(mData.compressionSize), file);
+        fread(mData.args, 1, sizeof(mData.args), file);
+        fread(&mData.nameSize, 1, sizeof(mData.nameSize), file);
 
-//        char byte;
-//        for(int j = 0; j < mData.nameSize; ++j) {
-//            file >> byte;
-//            mData.fileName.append(byte);
-//        }
+        int byte;
+        for(int j=0; j < mData.nameSize; ++j) {
+            byte = fgetc(file);
+            mData.fileName.append(byte);
+        }
 
-//        data.push_back(mData);
-//    }
+        data.push_back(mData);
+    }
 
-        return data;
+    return data;
 }
 
 void Common::writeMetaData(const QVector<MetaData> &metaData, FILE*file)
 {
-//    int countFiles = metaData.size();
-//    file << countFiles;
-//    qDebug() << metaData.size();
-//    foreach(MetaData mData, metaData) {
-//        file << mData.originalSize << mData.compressionSize;
-//        file << mData.args[0] << mData.args[1] << mData.args[2];
-//        file << mData.nameSize;
+    int countFiles = metaData.size();
+    fwrite(&countFiles, 1, sizeof(countFiles), file);
 
-//        foreach(char byte, mData.fileName.toStdString()) {
-//            file << byte;
-//        }
+    foreach(MetaData mData, metaData) {
+        fwrite(&mData.compressionSize, 1, sizeof(mData.compressionSize), file);
+        fwrite(mData.args, 1, sizeof(mData.args), file);
+        fwrite(&mData.nameSize, 1, sizeof(mData.nameSize), file);
 
-//    }
+        foreach(char byte, mData.fileName.toStdString()) {
+            fputc(byte, file);
+        }
+
+    }
 }
 
 void Common::writeFile(const QString &inFile, FILE*outFile, bool deleteFile)
 {
-//    QFile readfile(inFile);
+    QFile readfile(inFile);
+    FILE* inputFile = fopen(inFile.toStdString().c_str(), "rb");
 
-//    if (!readfile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-//        qDebug() << QString("Невозможно открыть файл на чтение и запись: %1").arg(inFile);
-//        return;
-//    }
-//    QDataStream readStream (&readfile);
+    if (inFile == NULL) {
+        qDebug() << QString("Невозможно открыть файл на чтение и запись: %1").arg(inFile);
+        return;
+    }
 
-//    unsigned char byteBuffer;
-//    while(!readStream.atEnd()) {
-//        readStream >> byteBuffer;
-//        outFile << byteBuffer;
-//    }
+    const size_t BUFFER_SIZE = 4096;
+    char buf[BUFFER_SIZE];
+    size_t size;
 
-//    if(deleteFile) {
-//        readfile.remove();
-//    }
+    while (size = fread(buf, 1, BUFFER_SIZE, inputFile)) {
+        fwrite(buf, 1, size, outFile);
+    }
+
+    fclose(inputFile);
+
+    if(deleteFile) {
+        readfile.remove();
+    }
 }
 
 Common::FileHeader Common::readFileHeader(FILE*file)
 {
     FileHeader fileHeader;
-    fscanf (file, "%c%c%c", &fileHeader.index[0]);
-    fscanf (file, "%d%d%d", &fileHeader.version[0]);
-//    file >> fileHeader.index[0] >> fileHeader.index[1] >> fileHeader.index[2];
-//    file >> fileHeader.version[0] >> fileHeader.version[1] >> fileHeader.version[2];
+
+    fread(fileHeader.index, sizeof(*fileHeader.index), 3, file);
+    fread(fileHeader.version, sizeof(*fileHeader.version), 3, file);
 
     return fileHeader;
 }
 
 void Common::writeFileHeader(FileHeader fileHeader, FILE* file)
 {
-    fwrite(&fileHeader.index[0], 1, sizeof(fileHeader.index), file);
-    fwrite(&fileHeader.version[0], 1, sizeof(fileHeader.version), file);
-//    file << fileHeader.index[0] << fileHeader.index[1] << fileHeader.index[2];
-//    file << fileHeader.version[0] << fileHeader.version[1] << fileHeader.version[2];
+    fwrite(fileHeader.index, 1, sizeof(fileHeader.index), file);
+    fwrite(fileHeader.version, 1, sizeof(fileHeader.version), file);
 }

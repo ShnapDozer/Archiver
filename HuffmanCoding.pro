@@ -10,21 +10,22 @@ SOURCES += src/choose.cpp \
         src/common.cpp \
         src/decoding.cpp \
         src/encoding.cpp \
-        src/fileviewwidget.cpp \
         src/huffman.cpp \
-        src/main.cpp
+        src/main.cpp \
+    src/fileEncodewidget.cpp
 
 HEADERS += include/choose.h \
         include/common.h \
         include/decoding.h \
         include/encoding.h \
-        include/fileviewwidget.h \
-        include/huffman.h
+        include/huffman.h \
+    include/fileEncodewidget.h
 
 FORMS += forms/choose.ui \
         forms/decoding.ui \
         forms/encoding.ui \
-        forms/fileviewwidget.ui
+    forms/fileEncodewidget.ui \
+    forms/filedecodewidget.ui
 
 RESOURCES += \
     res/resurses.qrc

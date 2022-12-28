@@ -7,6 +7,7 @@
 
 #include "include/huffman.h"
 #include "include/common.h"
+#include "include/fileEncodewidget.h"
 
 namespace Ui {
 class Decoding;
@@ -25,6 +26,7 @@ private:
     Ui::Decoding *ui;
 
     QVector<Common::MetaData> _metaData;
+    QVector<FileViewWidget*> _fileWidgets;
     QDataStream *_inStream;
     QFile *_inputFile;
     qint64 _headMeteSpace;
